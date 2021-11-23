@@ -1,172 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!--UAT-->
 <ProxyEndpoint name="default">
     <DefaultFaultRule name="fault-rule">
         <Step>
-            <Name>FC-FaultRules</Name>
-        </Step>
-        <Step>
-            <Name>FC-setResponseHeaders</Name>
+            <Name>FC-ErrorHandling</Name>
         </Step>
     </DefaultFaultRule>
-    <FaultRules>
-        <FaultRule name="RaiseFault">
-            <Step>
-                <Name>FC-setResponseHeaders</Name>
-            </Step>
-            <Condition>(fault.name = "RaiseFault")</Condition>
-        </FaultRule>
-    </FaultRules>
     <PreFlow name="PreFlow">
         <Request>
             <Step>
-                <Name>AM-setSuccessFlag</Name>
+                <Name>AM-IntialSuccessFlag</Name>
             </Step>
             <Step>
-                <Name>EV-extractTransactionId</Name>
-                <Condition>(request.header.content-type = "application/json")</Condition>
+                <Name>FC-PreflowPolicies</Name>
             </Step>
             <Step>
-                <Name>KVM-readCommonConfig</Name>
-            </Step>
-            <Step>
-                <Name>JS-corsValidation</Name>
-            </Step>
-            <Step>
-                <Condition>(request.verb is "OPTIONS")</Condition>
-                <Name>RF-handlePreflightRequest</Name>
-            </Step>
-            <Step>
-                <Name>Verify-API-Key</Name>
-            </Step>
-            <Step>
-                <Name>JS-validatingIP</Name>
-            </Step>
-            <Step>
-                <Condition>!(isValidIp is true)</Condition>
-                <Name>AC-accesscontrol</Name>
-            </Step>
-            <Step>
-                <Name>SA-rateLimit</Name>
-            </Step>
-            <Step>
-                <Name>Quota</Name>
-            </Step>
-            <Step>
-                <Name>RF-invalidContenType</Name>
-                <Condition>(request.header.content-type != "application/json")</Condition>
-            </Step>
-            <Step>
-                <Name>EV-extractPayload</Name>
-                <Condition>(request.header.content-type = "application/json")</Condition>
-            </Step>
-            <Step>
-                <Name>JS-validateScope</Name>
-            </Step>
-            <Step>
-                <Condition>!(isValidScope is true)</Condition>
-                <Name>RF-invalidRequestScope</Name>
-            </Step>
-            <Step>
-                <Name>RF-badRequest</Name>
-                <Condition>(requestPayload.RequestSignatureEncryptedValue = "") OR (requestPayload.SymmetricKeyEncryptedValue = "") OR (requestPayload.Scope = "")  OR (requestPayload.TransactionId = "") OR (requestPayload.OAuthTokenValue = "")</Condition>
-            </Step>
-            <Step>
-                <Name>AM-setAuthHeader</Name>
-            </Step>
-            <Step>
-                <Name>FC-validateToken</Name>
+                <Name>OAS-RequestValidation</Name>
+                <Condition>(proxy.pathsuffix MatchesPath "/customerlimit")</Condition>
             </Step>
         </Request>
-        <Response>
-            <Step>
-                <Name>FC-setResponseHeaders</Name>
-            </Step>
-        </Response>
+        <Response/>
     </PreFlow>
     <Flows>
-        <Flow name="OTP_Gen">
+        <Flow name="Customer_Limit_Equiry">
             <Description/>
             <Request>
                 <Step>
-                    <Name>FC-validateCertificateAndExtractPublickey</Name>
+                    <Name>FC-ThreatProtection</Name>
                 </Step>
                 <Step>
-                    <Name>FC-Decryption</Name>
-                </Step>
-                <Step>
-                    <Name>Verify-JWT</Name>
-                </Step>
-                <Step>
-                    <Name>Decode-JWT</Name>
-                </Step>
-                <Step>
-                    <Name>AM-setPayload</Name>
-                </Step>
-                <Step>
-                    <Name>EV-setRequestRefNoLogs</Name>
-                    <Condition>(request.header.content-type = "application/json")</Condition>
-                </Step>
-                <Step>
-                    <Name>FC-threatProtection</Name>
-                </Step>
-                <Step>
-                    <Name>JSON-to-XML</Name>
-                </Step>
-                <Step>
-                    <Name>XSLT-request</Name>
-                </Step>
-                <Step>
-                    <Name>AM-setRequestContentLogs</Name>
+                    <Name>AM-SetRequest</Name>
                 </Step>
             </Request>
             <Response>
                 <Step>
-                    <Name>XSLT-setBackendResponseLog</Name>
+                    <Name>AM-SetMockResponse</Name>
                 </Step>
                 <Step>
-                    <Name>AM-setResponseContentLogs</Name>
-                </Step>
-                <Step>
-                    <Name>XSLT-response</Name>
-                </Step>
-                <Step>
-                    <Name>XML-to-JSON</Name>
-                </Step>
-                <Step>
-                    <Name>AM-setTransformedPayloadLog</Name>
-                </Step>
-                <Step>
-                    <Name>EV-setResponseErrorCodeLogs</Name>
-                    <Condition>(response.content != null)</Condition>
-                </Step>
-                <Step>
-                    <Name>Generate-JWS</Name>
-                </Step>
-                <Step>
-                    <Name>FC-Encryption</Name>
-                </Step>
-                <Step>
-                    <Name>AM-setPayloadResponse</Name>
+                    <Name>AM-FinalSuccessFlag</Name>
                 </Step>
             </Response>
-            <Condition>((proxy.pathsuffix MatchesPath "") or (proxy.pathsuffix MatchesPath "/")) and (request.verb = "POST")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/customerlimit")</Condition>
         </Flow>
-        <Flow name="OTP_Gen">
+        <Flow name="Server Unavailable">
             <Description/>
             <Request>
                 <Step>
-                    <Name>RF-faultResponseMethodNotAllowed</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "") or (proxy.pathsuffix MatchesPath "/")</Condition>
-        </Flow>
-        <Flow name="Fallback">
-            <Description/>
-            <Request>
-                <Step>
-                    <Name>RF-faultResponseNotFound</Name>
+                    <Name>RF-ResourceNotFound</Name>
                 </Step>
             </Request>
             <Response/>
@@ -177,20 +56,18 @@
         <Response/>
     </PostFlow>
     <PostClientFlow>
+        <Request/>
         <Response>
             <Step>
                 <Name>ML-setMessageLogging</Name>
             </Step>
-            <Step>
-                <Name>ML-SIEM</Name>
-            </Step>
         </Response>
     </PostClientFlow>
     <HTTPProxyConnection>
-        <BasePath>/api/Basic-Template</BasePath>
-        <VirtualHost>secure</VirtualHost>
+        <BasePath>/ccl</BasePath>
+        <VirtualHost>default</VirtualHost>
     </HTTPProxyConnection>
     <RouteRule name="default">
-        <TargetEndpoint>default</TargetEndpoint>
+        <TargetEndpoint>TargetEndpoint-1</TargetEndpoint>
     </RouteRule>
 </ProxyEndpoint>

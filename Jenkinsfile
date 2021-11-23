@@ -8,30 +8,9 @@ pipeline {
         nodejs 'NodeJS'
     }
     stages {
-    //     stage('NPM version'){
-    //         steps{
-    //             sh 'npm --version'
-    //         }
-    //     }
-
-    //     stage('Maven version'){
-    //         steps{
-    //             sh 'mvn --version'
-    //         }
-    //     }
-
-    //     stage('Print ENvironment Variables'){
-    //         steps{
-    //             sh 'print env'
-    //         }
-    //     }
         stage('Clean') {
             steps {
                 dir('edge') {
-                    sh "echo $MAVEN_HOME"
-                    sh "cd ~"
-                    sh "pwd"
-                    sh "ls -la"
                     sh "mvn clean"
                 }
             }
@@ -39,6 +18,12 @@ pipeline {
         stage('Linting') {
             steps {
                 dir("edge") {
+                   /* sh '''
+                        cp -R /tmp/APIGEE/APIGEELINT/. /var/lib/cloudbees-core-cm/workspace/APIGEE/Basic-Template/edge
+                        mvn package
+                        npmbin=`npm bin`
+                        eval $npmbin/apigeelint -s apiproxy/ -f html.js > target/apigeelint
+                        '''*/
                      sh "npm install"
                      sh  "mvn package"
                     sh "apigeelint -s apiproxy -f html.js > target/apigeelint"
@@ -90,7 +75,7 @@ pipeline {
                       }
                     }
                 }    
-            stage('Functional Test') {
+            /*stage('Functional Test') {
                 steps {
                 dir('edge') {
                  sh "node ./node_modules/cucumber/bin/cucumber-js target/test/integration/features --format json:target/reports.json" 
@@ -116,7 +101,7 @@ pipeline {
                     ])
                 }
             }
-        }
+        }*/
 
         }
     }

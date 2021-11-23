@@ -1,21 +1,21 @@
 [
     {
-        "name": "OTP_Product",
+        "name": "ccl_enquiry",
         "apiResources": [],
         "approvalType": "auto",
         "attributes": [
             {
                 "name": "description",
-                "value": "OTP_Product"
+                "value": "ccl_enquiry"
             }
         ],
-        "description": "OTP_Product",
-        "displayName": "OTP_Product",
+        "description": "ccl_enquiry",
+        "displayName": "ccl_enquiry",
         "environments": [
             "dev-1"
         ],
         "proxies": [
-            "OTP_Generation_Service_REST"
+            "ccl_enquiry"
         ],
         "quota": "3000",
         "quotaInterval": "1",

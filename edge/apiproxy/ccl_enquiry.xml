@@ -1,0 +1,29 @@
+<APIProxy revision="9" name="ccl_enquiry">
+    <DisplayName>ccl_inquiry</DisplayName>
+    <Description>https://httpbin.org/anything</Description>
+    <CreatedAt>1637565523653</CreatedAt>
+    <LastModifiedAt>1637565523653</LastModifiedAt>
+    <BasePaths>/ccl</BasePaths>
+    <Policies>
+        <Policy>ML-setMessageLogging</Policy>
+        <Policy>RF-ResourceNotFound</Policy>
+        <Policy>AM-SetMockResponse</Policy>
+        <Policy>FC-PreflowPolicies</Policy>
+        <Policy>FC-ThreatProtection</Policy>
+        <Policy>FC-ErrorHandling</Policy>
+        <Policy>AM-SetRequest</Policy>
+        <Policy>AM-IntialSuccessFlag</Policy>
+        <Policy>AM-FinalSuccessFlag</Policy>
+        <Policy>OAS-RequestValidation</Policy>
+        <Policy>AM-SupressPathSuffix</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>oas://openapi-phoenix-enquiry.yaml</Resource>
+    </Resources>
+    <TargetEndpoints>
+        <TargetEndpoint>TargetEndpoint-1</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>

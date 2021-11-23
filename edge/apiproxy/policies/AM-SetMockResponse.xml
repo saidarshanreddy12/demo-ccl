@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-SetMockResponse">
+    <DisplayName>AM-SetMockResponse</DisplayName>
+    <Properties/>
+    <Set>
+        <Payload contentType="application/json">
+            {
+  "channel-ref": "MOBILE",
+  "request-id": "71b8599b-d795-4809-b820-c8ed723b2087",
+  "customers": [
+    {
+      "customer-id": 1234567890,
+      "profile-id": "string",
+      "dedupe-match-category": "1a",
+      "customer-credit-limit": 12000,
+      "customer-current-balance": 5200.5,
+      "ccustomer-unposted-amount": "257.00",
+      "customer-block-code": "string",
+      "customer-collateral-code": "string",
+      "customer-cycle-due": "string",
+      "customer-past-due-amount": 1200.8,
+      "credit-risk-score": "string",
+      "credit-account-open-date": "11/03/2019"
+    }
+  ]
+}
+        </Payload>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>

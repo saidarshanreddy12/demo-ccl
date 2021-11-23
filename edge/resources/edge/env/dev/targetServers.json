@@ -1,16 +1,9 @@
 [
     
   {
-      "name": "HDFCBank",
-      "host": "openapiuat.hdfcbank.com",
+      "name": "Basic-Template",
+      "host": "example.com",
       "isEnabled": true,
-      "port": 9443,
-      "sSLInfo": {
-            "clientAuthEnabled": "true",
-            "enabled": "true",
-            "ignoreValidationErrors": "false",
-            "keyAlias": "hdfc-main",
-            "keyStore": "hdfc-main-dec-2020"
-      }
+      "port": 443
   }
 ]

@@ -1,11 +1,11 @@
 {
-    "abhinavp@sidgs.com": [
+    "anushav@sidgs.com": [
         {
             "apiProducts": [
-                "OTP_Product"
+                "ccl_enquiry_Product"
             ],
             "callbackUrl": "",
-            "name": "OTP_App",
+            "name": "ccl_enquiry_App",
             "scopes": []
         }
     ]

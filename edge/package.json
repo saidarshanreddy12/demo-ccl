@@ -1,5 +1,5 @@
 {
-	"name": "Basic-Template",
+	"name": "ccl_enquiry",
 	"version": "1.0.0",
 	"scripts": {
 		"test": "cucumber-js test"

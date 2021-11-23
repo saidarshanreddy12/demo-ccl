@@ -1,0 +1,279 @@
+openapi: 3.0.0
+info:
+  title: Customer Limit Equiry
+  x-category: Credit Risk
+  description: >
+    ## Introduction 
+
+    Provides enquiry capabilities to return information about customers credit limit details against unsecured lending products maintained with Phoenix.
+  contact:
+    name: Credit Risk
+  version: 1.0.0
+servers:
+  - url: https://<phoenix>/ccl/{version}/
+    variables:
+      version:
+        description: The Open API endpoints are accessible via **https** only
+        enum:
+          - v1
+        default: v1
+tags:
+  - name: Customer Credit Limit Details
+    description: >-
+      Credit Risk Assessment for credit product application. The process is only applicable to product onboarding for credit products such as credit cards.
+x-tagGroups:
+  - name: Credit Risk
+    tags:
+      - Credit Risk Assessment
+paths:
+  /customerlimit:
+    post:
+      security:
+        - basicAuth: [ ]
+      tags:
+        - Customer Credit Limit Details
+      operationId: customerCreditLimitEnquiry
+      summary: Customer Credit Limit Enquiry
+      description: >-
+        This end point is to retrieve customer credit limit details based on customer identification parameters.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - application-date
+                - source-system
+                - channel-ref
+                - request-id
+                - customer
+              properties:
+                application-date:
+                  type: string
+                  example: '15/10/1990'
+                  maxLength: 10
+                  description: This value is for application created date (dd/mm/yyyy)
+                source-system:
+                  type: string
+                  example: 'SCB-RTOB'
+                  description: >-
+                    Source system or Partner Name
+                channel-ref:
+                  type: string
+                  description: Source system transaction reference for reporting and reconciliation
+                  example: MOBILE
+                request-id:
+                  type: string
+                  description: Unique request id for each service to identify the duplicated request. Preferably uuid
+                  example: 71b8599b-d795-4809-b820-c8ed723b2087
+                customer:
+                  type: object
+                  required:
+                    - document-type
+                    - document-ref
+                    - fullname
+                    - date-of-birth
+                    - mobile-number
+                    - email-id
+                  properties:
+                    profile-id:
+                      type: string
+                      description: |
+                        Customer Profile ID (if available)
+                    document-type:
+                      type: string
+                      description: |
+                        Document Type should be hardcoded as sent as 'NNR' for NRIC, PST - Old Passport, CPA - for New Passport
+                      enum:
+                        - NNR
+                        - PST
+                        - CPA
+                    document-ref:
+                      type: string
+                      description: |
+                        Document reference pertaining to documenttype provided
+                        NNR - S8626240A
+                        PST - E12345678A
+                        CPA - E12345678A
+                      example: S8626240A
+                    fullname:
+                      type: string
+                      description: customer full name. Concatenation of firstname + middlename + lastname
+                      example: Yeung Kok Soon
+                    date-of-birth:
+                      type: string
+                      example: '15/10/1990'
+                      description: Indicates the date of birth of the Client. (dd/mm/yyyy)
+                    mobile-number:
+                      type: string
+                      description: |
+                        Indicates the mobile number of the Client.
+                        Plus_Sign + CountryCode + AreaCode(if any) + PhoneNumber (no spaces in between)
+                        Examples:
+                          +6588881234
+                          +85255551234
+                          +16469803696
+                          +4930901820
+                      example: '+6588881234'
+                    email-id:
+                      type: string
+                      description: Indicates the email address of the Client.
+                      example: koksoon.yeung@example.com
+      responses:
+        '200':
+          description: Customer Credit Limit Enquiry Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/application'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errors'
+        '401':
+          description: Unauthorized request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errors'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errors'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errors'
+        '504':
+          description: Timeout error occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errors'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    application:
+      type: object
+      required:
+        - channel-ref
+        - request-id
+        - customers
+      properties:
+        channel-ref:
+          type: string
+          description: Source system transaction reference for reporting and reconciliation
+          example: MOBILE
+        request-id:
+          type: string
+          description: Unique request id for each service to identify the duplicate request
+          example: 71b8599b-d795-4809-b820-c8ed723b2087
+        customers:
+          description: if there are no matching customers, this will be an empty array []
+          type: array
+          items:
+            $ref: '#/components/schemas/customer'
+    customer:
+      type: object
+      description: customer details.
+      required:
+        - customer-id
+      properties:
+        customer-id:
+          type: string
+          description: Phoenix customer Id
+          example: 1234567890
+        profile-id:
+          type: string
+          description: |
+            Customer Profile ID maintained in ICM
+        dedupe-match-category:
+          type: string
+          description: Dedupe match category
+          enum:
+            - 1a
+            - 1b
+            - 1c
+            - 1d
+            - 1e
+            - 1f
+            - 2a
+            - 2b
+            - 2c
+            - 2d
+          example: 1a
+        customer-credit-limit:
+          type: number
+          description: Customer credit card limit
+          example: 12000
+        customer-current-balance:
+          type: number
+          description: customer outstanding balance
+          example: 5200.50
+        ccustomer-unposted-amount:
+          type: number
+          description: Customer level unposted balance
+          example: '257.00'
+        customer-block-code:
+          type: string
+          description: Customer level block code
+        customer-collateral-code:
+          type: string
+          description: Customer collateral code
+        customer-cycle-due:
+          type: string
+          description: Customer credit deliquency status
+        customer-past-due-amount:
+          type: number
+          description: Customer overdue amount
+          example: 1200.80
+        credit-risk-score:
+          type: string
+          description: credit card risk score
+        credit-account-open-date:
+          type: string
+          description: Credit account open date (dd/mm/yyyy)
+          example: 11/03/2019
+    errors:
+      description: Error response with list of errors
+      type: object
+      required:
+        - request-id
+        - errors
+      properties:
+        request-id:
+          type: string
+          description: the request-id from the enquiry request
+          example: 71b8599b-d795-4809-b820-c8ed723b2087
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+    error:
+      description: Error details
+      required:
+        - code
+        - detail
+      type: object
+      properties:
+        code:
+          description: an application-specific error code
+          type: string
+        detail:
+          description: a human-readable explanation specific to this problem
+          type: string
+        source:
+          description: >-
+            reference to the source of the error. e.g. a URI query parameter
+            caused the error or an attribute in the request object
+          type: string

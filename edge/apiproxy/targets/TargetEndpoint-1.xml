@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TargetEndpoint name="default">
-    <DefaultFaultRule name="fault-rule">
-        <AlwaysEnforce>true</AlwaysEnforce>
-        <Step>
-            <Name>FC-FaultRules</Name>
-        </Step>
-        <Step>
-            <Name>FC-setResponseHeaders</Name>
-        </Step>
-    </DefaultFaultRule>
+<TargetEndpoint name="TargetEndpoint-1">
+    <Description/>
+    <FaultRules/>
     <PreFlow name="PreFlow">
-        <Request/>
+        <Request>
+            <Step>
+                <Name>AM-SupressPathSuffix</Name>
+            </Step>
+        </Request>
         <Response/>
     </PreFlow>
-    <Flows/>
     <PostFlow name="PostFlow">
         <Request/>
         <Response/>
     </PostFlow>
+    <Flows/>
     <HTTPTargetConnection>
-        <LoadBalancer>
-            <Server name="HDFCBank"/>
-        </LoadBalancer>
-        <Path>/API/OTP_Gen_route</Path>
+        <URL>https://customer-service.apps.dev.nonprod.c0.phx-infra.com/v2/onboarding/init-customer</URL>
         <Properties>
             <Property name="keepalive.timeout.millis">17000</Property>
             <Property name="io.timeout.millis">8500</Property>

@@ -20,7 +20,7 @@ Before(function() {
    
 });
 
-Given(/^Send request to OTP Generation Proxy$/, function(){
+Given(/^Send request to Basic-Template$/, function(){
   this.apickli = new apickli.Apickli('https', 'api-uat.hdfcbank.com');
   this.apickli.clientTLSConfig = {
     valid: {
