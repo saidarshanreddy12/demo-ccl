@@ -1,7 +1,7 @@
 [
     
     {
-        "name": "Basic-Template",
+        "name": "ccl_enquiry",
         "host": "example.com",
         "isEnabled": true,
         "port": 443

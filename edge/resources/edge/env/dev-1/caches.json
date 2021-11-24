@@ -12,7 +12,7 @@
         "inMemorySizeInKB": 0,
         "maxElementsInMemory": 0,
         "maxElementsOnDisk": 0,
-        "name": "demo-helloWorld-v1-response_cache",
+        "name": "ccl_enquiry",
         "overflowToDisk": false,
         "persistent": false
     }

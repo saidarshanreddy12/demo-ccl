@@ -1,16 +1,16 @@
 [
     {
-        "name": "ccl_enquiry",
+        "name": "ccl_enquiry_product",
         "apiResources": [],
         "approvalType": "auto",
         "attributes": [
             {
                 "name": "description",
-                "value": "ccl_enquiry"
+                "value": "ccl_enquiry_product"
             }
         ],
-        "description": "ccl_enquiry",
-        "displayName": "ccl_enquiry",
+        "description": "ccl_enquiry_product",
+        "displayName": "ccl_enquiry_product",
         "environments": [
             "dev-1"
         ],

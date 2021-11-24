@@ -1,6 +1,6 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.demo.api</groupId>
+    <groupId>com.ccl.api</groupId>
     <artifactId>ccl_enquiry-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.1-RC1-SNAPSHOT</version>
